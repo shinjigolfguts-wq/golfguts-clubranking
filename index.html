@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GOLF CLUB FINDER</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+      margin: 0;
+
+      padding: 0;
+
+    }
+
+    :root {
+
+      --green: #123c2d;
+
+      --green2: #1d5b43;
+
+      --light: #f4f7f5;
+
+      --white: #ffffff;
+
+      --gray: #6e7a74;
+
+      --line: #dde5e0;
+
+      --accent: #d8f1e4;
+
+    }
+
+    body {
+
+      font-family:
+
+        -apple-system,
+
+        BlinkMacSystemFont,
+
+        "Helvetica Neue",
+
+        "Noto Sans JP",
+
+        Arial,
+
+        sans-serif;
+
+      background:
+
+        linear-gradient(
+
+          180deg,
+
+          #eef5f1 0%,
+
+          #f8faf9 40%,
+
+          #ffffff 100%
+
+        );
+
+      color: #1a1a1a;
+
+      min-height: 100vh;
+
+    }
+
+    .hero {
+
+      background:
+
+        radial-gradient(
+
+          circle at top right,
+
+          rgba(255,255,255,.15),
+
+          transparent 35%
+
+        ),
+
+        linear-gradient(
+
+          135deg,
+
+          #0c2e22,
+
+          #174a35
+
+        );
+
+      color: white;
+
+      padding: 56px 20px 70px;
+
+      text-align: center;
+
+      border-radius: 0 0 36px 36px;
+
+    }
+
+    .logo {
+
+      font-size: 12px;
+
+      letter-spacing: 4px;
+
+      opacity: .75;
+
+      margin-bottom: 18px;
+
+    }
+
+    .hero h1 {
+
+      font-size: clamp(34px, 8vw, 62px);
+
+      line-height: 1.05;
+
+      letter-spacing: -1.5px;
+
+    }
+
+    .hero p {
+
+      margin: 20px auto 0;
+
+      max-width: 540px;
+
+      line-height: 1.8;
+
+      color: rgba(255,255,255,.8);
+
+      font-size: 15px;
+
+    }
+
+    .wrap {
+
+      width: min(92%, 720px);
+
+      margin: -32px auto 80px;
+
+      position: relative;
+
+      z-index: 2;
+
+    }
+
+    .progress-card {
+
+      background: rgba(255,255,255,.96);
+
+      border-radius: 20px;
+
+      padding: 18px 20px;
+
+      box-shadow: 0 12px 40px rgba(20,60,45,.12);
+
+      margin-bottom: 18px;
+
+    }
+
+    .progress-top {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      font-size: 12px;
+
+      color: var(--gray);
+
+      margin-bottom: 10px;
+
+    }
+
+    .progress {
+
+      height: 8px;
+
+      background: #e8eeea;
+
+      border-radius: 999px;
+
+      overflow: hidden;
+
+    }
+
+    .progress-bar {
+
+      height: 100%;
+
+      width: 25%;
+
+      background:
+
+        linear-gradient(
+
+          90deg,
+
+          #1c6748,
+
+          #4c9a74
+
+        );
+
+      border-radius: 999px;
+
+      transition: .35s;
+
+    }
+
+    .card {
+
+      background: rgba(255,255,255,.98);
+
+      border-radius: 26px;
+
+      padding: 30px 24px;
+
+      box-shadow: 0 14px 45px rgba(19,54,41,.09);
+
+      border: 1px solid rgba(220,230,224,.9);
+
+      display: none;
+
+      animation: fade .35s ease;
+
+    }
+
+    .card.active {
+
+      display: block;
+
+    }
+
+    @keyframes fade {
+
+      from {
+
+        opacity: 0;
+
+        transform: translateY(8px);
+
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+      }
+
+    }
+
+    .step {
+
+      font-size: 12px;
+
+      font-weight: 700;
+
+      color: var(--green2);
+
+      letter-spacing: 1.5px;
+
+      margin-bottom: 10px;
+
+    }
+
+    .card h2 {
+
+      font-size: 25px;
+
+      line-height: 1.4;
+
+      margin-bottom: 8px;
+
+    }
+
+    .question-note {
+
+      color: var(--gray);
+
+      font-size: 14px;
+
+      margin-bottom: 24px;
+
+      line-height: 1.7;
+
+    }
+
+    .options {
+
+      display: grid;
+
+      gap: 12px;
+
+    }
+
+    .option {
+
+      width: 100%;
+
+      border: 1px solid var(--line);
+
+      background: #fff;
+
+      padding: 18px 18px;
+
+      border-radius: 15px;
+
+      text-align: left;
+
+      cursor: pointer;
+
+      transition: .2s;
+
+      font-size: 15px;
+
+      color: #1d2421;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+    }
+
+    .option::after {
+
+      content: "→";
+
+      color: #9aa6a0;
+
+      font-size: 18px;
+
+    }
+
+    .option:hover {
+
+      border-color: #78a891;
+
+      transform: translateY(-1px);
+
+      box-shadow: 0 7px 18px rgba(24,76,55,.08);
+
+    }
+
+    .option.selected {
+
+      background: var(--green);
+
+      color: white;
+
+      border-color: var(--green);
+
+      box-shadow: 0 8px 24px rgba(18,60,45,.18);
+
+    }
+
+    .option.selected::after {
+
+      color: white;
+
+    }
+
+    .navigation {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 25px;
+
+    }
+
+    .btn {
+
+      border: none;
+
+      border-radius: 15px;
+
+      padding: 16px 18px;
+
+      cursor: pointer;
+
+      font-weight: 700;
+
+      font-size: 15px;
+
+    }
+
+    .back {
+
+      background: #eef3f0;
+
+      color: #48564f;
+
+      flex: 1;
+
+    }
+
+    .next {
+
+      background: var(--green);
+
+      color: white;
+
+      flex: 2;
+
+    }
+
+    .next:disabled {
+
+      opacity: .35;
+
+      cursor: not-allowed;
+
+    }
+
+    .result {
+
+      display: none;
+
+      animation: fade .4s ease;
+
+    }
+
+    .result.show {
+
+      display: block;
+
+    }
+
+    .result-head {
+
+      background:
+
+        linear-gradient(
+
+          135deg,
+
+          #103928,
+
+          #216146
+
+        );
+
+      color: white;
+
+      border-radius: 26px;
+
+      padding: 32px 25px;
+
+      margin-bottom: 16px;
+
+    }
+
+    .result-label {
+
+      font-size: 12px;
+
+      letter-spacing: 2px;
+
+      opacity: .7;
+
+    }
+
+    .result-type {
+
+      font-size: 30px;
+
+      margin-top: 10px;
+
+      font-weight: 800;
+
+    }
+
+    .result-desc {
+
+      margin-top: 14px;
+
+      color: rgba(255,255,255,.8);
+
+      line-height: 1.8;
+
+      font-size: 14px;
+
+    }
+
+    .club-card {
+
+      background: white;
+
+      border-radius: 20px;
+
+      padding: 22px;
+
+      margin-bottom: 12px;
+
+      border: 1px solid var(--line);
+
+      box-shadow: 0 8px 24px rgba(20,60,45,.06);
+
+    }
+
+    .club-category {
+
+      font-size: 12px;
+
+      font-weight: 800;
+
+      color: var(--green2);
+
+      letter-spacing: 1px;
+
+    }
+
+    .club-name {
+
+      font-size: 21px;
+
+      font-weight: 800;
+
+      margin-top: 7px;
+
+    }
+
+    .club-reason {
+
+      margin-top: 10px;
+
+      line-height: 1.8;
+
+      color: var(--gray);
+
+      font-size: 14px;
+
+    }
+
+    .restart {
+
+      width: 100%;
+
+      margin-top: 15px;
+
+      padding: 17px;
+
+      border: none;
+
+      background: #eaf1ed;
+
+      color: var(--green);
+
+      font-size: 15px;
+
+      font-weight: 800;
+
+      border-radius: 16px;
+
+      cursor: pointer;
+
+    }
+
+    .footer {
+
+      text-align: center;
+
+      color: #98a29d;
+
+      font-size: 12px;
+
+      margin-top: 40px;
+
+      line-height: 1.8;
+
+    }
+
+    @media (max-width: 520px) {
+
+      .hero {
+
+        padding-top: 45px;
+
+      }
+
+      .card {
+
+        padding: 25px 18px;
+
+      }
+
+      .club-name {
+
+        font-size: 19px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <section class="hero">
+
+    <div class="logo">
+
+      GOLFGUTS
+
+    </div>
+
+    <h1>
+
+      GOLF CLUB<br>
+
+      FINDER
+
+    </h1>
+
+    <p>
+
+      あなたのレベルやミス傾向から、
+
+      相性の良いゴルフクラブタイプを診断します。
+
+    </p>
+
+  </section>
+
+  <main class="wrap">
+
+    <div
+
+      class="progress-card"
+
+      id="progressCard"
+
+    >
+
+      <div class="progress-top">
+
+        <span id="progressText">
+
+          QUESTION 1 / 4
+
+        </span>
+
+        <span id="progressPercent">
+
+          25%
+
+        </span>
+
+      </div>
+
+      <div class="progress">
+
+        <div
+
+          class="progress-bar"
+
+          id="progressBar"
+
+        ></div>
+
+      </div>
+
+    </div>
+
+    <!-- Q1 -->
+
+    <section
+
+      class="card active"
+
+      data-step="0"
+
+    >
+
+      <div class="step">
+
+        QUESTION 01
+
+      </div>
+
+      <h2>
+
+        あなたのゴルフレベルは？
+
+      </h2>
+
+      <p class="question-note">
+
+        現在の実力に近いものを選択してください。
+
+      </p>
+
+      <div
+
+        class="options"
+
+        data-key="level"
+
+      >
+
+        <button
+
+          class="option"
+
+          data-value="beginner"
+
+        >
+
+          初心者
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="intermediate"
+
+        >
+
+          中級者
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="advanced"
+
+        >
+
+          上級者
+
+        </button>
+
+      </div>
+
+      <div class="navigation">
+
+        <button
+
+          class="btn next"
+
+          onclick="nextStep()"
+
+          disabled
+
+        >
+
+          次へ
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- Q2 -->
+
+    <section
+
+      class="card"
+
+      data-step="1"
+
+    >
+
+      <div class="step">
+
+        QUESTION 02
+
+      </div>
+
+      <h2>
+
+        ドライバーで一番多いミスは？
+
+      </h2>
+
+      <p class="question-note">
+
+        普段のラウンドで最も多い傾向を選んでください。
+
+      </p>
+
+      <div
+
+        class="options"
+
+        data-key="driverMiss"
+
+      >
+
+        <button
+
+          class="option"
+
+          data-value="slice"
+
+        >
+
+          右へ曲がる・スライス
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="hook"
+
+        >
+
+          左へ曲がる・フック
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="both"
+
+        >
+
+          左右どちらにも曲がる
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="distance"
+
+        >
+
+          飛距離が足りない
+
+        </button>
+
+      </div>
+
+      <div class="navigation">
+
+        <button
+
+          class="btn back"
+
+          onclick="prevStep()"
+
+        >
+
+          戻る
+
+        </button>
+
+        <button
+
+          class="btn next"
+
+          onclick="nextStep()"
+
+          disabled
+
+        >
+
+          次へ
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- Q3 -->
+
+    <section
+
+      class="card"
+
+      data-step="2"
+
+    >
+
+      <div class="step">
+
+        QUESTION 03
+
+      </div>
+
+      <h2>
+
+        アイアンの悩みは？
+
+      </h2>
+
+      <p class="question-note">
+
+        最も改善したいものを選んでください。
+
+      </p>
+
+      <div
+
+        class="options"
+
+        data-key="ironMiss"
+
+      >
+
+        <button
+
+          class="option"
+
+          data-value="launch"
+
+        >
+
+          球が上がりにくい
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="contact"
+
+        >
+
+          ダフリ・トップが多い
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="distance"
+
+        >
+
+          飛距離が足りない
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="control"
+
+        >
+
+          方向性が安定しない
+
+        </button>
+
+      </div>
+
+      <div class="navigation">
+
+        <button
+
+          class="btn back"
+
+          onclick="prevStep()"
+
+        >
+
+          戻る
+
+        </button>
+
+        <button
+
+          class="btn next"
+
+          onclick="nextStep()"
+
+          disabled
+
+        >
+
+          次へ
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- Q4 -->
+
+    <section
+
+      class="card"
+
+      data-step="3"
+
+    >
+
+      <div class="step">
+
+        QUESTION 04
+
+      </div>
+
+      <h2>
+
+        クラブに一番求めるものは？
+
+      </h2>
+
+      <p class="question-note">
+
+        最終的なクラブ選びで重視したいポイントです。
+
+      </p>
+
+      <div
+
+        class="options"
+
+        data-key="priority"
+
+      >
+
+        <button
+
+          class="option"
+
+          data-value="easy"
+
+        >
+
+          やさしさ・ミスへの強さ
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="distance"
+
+        >
+
+          飛距離
+
+        </button>
+
+        <button
+
+          class="option"
+
+          data-value="control"
+
+        >
+
+          操作性・方向性
+
+        </button>
+
+      </div>
+
+      <div class="navigation">
+
+        <button
+
+          class="btn back"
+
+          onclick="prevStep()"
+
+        >
+
+          戻る
+
+        </button>
+
+        <button
+
+          class="btn next"
+
+          onclick="showResult()"
+
+          disabled
+
+        >
+
+          診断結果を見る
+
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- RESULT -->
+
+    <section
+
+      class="result"
+
+      id="result"
+
+    >
+
+      <div class="result-head">
+
+        <div class="result-label">
+
+          YOUR RESULT
+
+        </div>
+
+        <div
+
+          class="result-type"
+
+          id="resultType"
+
+        ></div>
+
+        <div
+
+          class="result-desc"
+
+          id="resultDesc"
+
+        ></div>
+
+      </div>
+
+      <div id="clubResults"></div>
+
+      <button
+
+        class="restart"
+
+        onclick="restart()"
+
+      >
+
+        もう一度診断する
+
+      </button>
+
+    </section>
+
+    <div class="footer">
+
+      GOLFGUTS CLUB FINDER<br>
+
+      診断結果はクラブ選びの参考情報です。
+
+    </div>
+
+  </main>
+
+  <script>
+
+    let currentStep = 0;
+
+    const answers = {
+
+      level: null,
+
+      driverMiss: null,
+
+      ironMiss: null,
+
+      priority: null
+
+    };
+
+    const cards =
+
+      document.querySelectorAll(".card");
+
+    document
+
+      .querySelectorAll(".options")
+
+      .forEach(group => {
+
+        const key =
+
+          group.dataset.key;
+
+        group
+
+          .querySelectorAll(".option")
+
+          .forEach(button => {
+
+            button.addEventListener(
+
+              "click",
+
+              () => {
+
+                group
+
+                  .querySelectorAll(".option")
+
+                  .forEach(btn => {
+
+                    btn.classList.remove(
+
+                      "selected"
+
+                    );
+
+                  });
+
+                button.classList.add(
+
+                  "selected"
+
+                );
+
+                answers[key] =
+
+                  button.dataset.value;
+
+                const card =
+
+                  button.closest(".card");
+
+                const nextButton =
+
+                  card.querySelector(".next");
+
+                nextButton.disabled = false;
+
+              }
+
+            );
+
+          });
+
+      });
+
+    function updateProgress() {
+
+      const percent =
+
+        ((currentStep + 1) / 4) * 100;
+
+      document.getElementById(
+
+        "progressText"
+
+      ).textContent =
+
+        `QUESTION ${currentStep + 1} / 4`;
+
+      document.getElementById(
+
+        "progressPercent"
+
+      ).textContent =
+
+        `${percent}%`;
+
+      document.getElementById(
+
+        "progressBar"
+
+      ).style.width =
+
+        `${percent}%`;
+
+    }
+
+    function showStep(step) {
+
+      cards.forEach(card => {
+
+        card.classList.remove("active");
+
+      });
+
+      cards[step]
+
+        .classList
+
+        .add("active");
+
+      currentStep = step;
+
+      updateProgress();
+
+      window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+      });
+
+    }
+
+    function nextStep() {
+
+      if (currentStep < 3) {
+
+        showStep(currentStep + 1);
+
+      }
+
+    }
+
+    function prevStep() {
+
+      if (currentStep > 0) {
+
+        showStep(currentStep - 1);
+
+      }
+
+    }
+
+    function showResult() {
+
+      cards.forEach(card => {
+
+        card.style.display = "none";
+
+      });
+
+      document.getElementById(
+
+        "progressCard"
+
+      ).style.display = "none";
+
+      const result =
+
+        document.getElementById(
+
+          "result"
+
+        );
+
+      result.classList.add("show");
+
+      const data =
+
+        createDiagnosis();
+
+      document.getElementById(
+
+        "resultType"
+
+      ).textContent =
+
+        data.type;
+
+      document.getElementById(
+
+        "resultDesc"
+
+      ).textContent =
+
+        data.description;
+
+      const container =
+
+        document.getElementById(
+
+          "clubResults"
+
+        );
+
+      container.innerHTML = "";
+
+      data.clubs.forEach(club => {
+
+        container.innerHTML += `
+
+          <div class="club-card">
+
+            <div class="club-category">
+
+              ${club.category}
+
+            </div>
+
+            <div class="club-name">
+
+              ${club.name}
+
+            </div>
+
+            <div class="club-reason">
+
+              ${club.reason}
+
+            </div>
+
+          </div>
+
+        `;
+
+      });
+
+      window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+      });
+
+    }
+
+    function createDiagnosis() {
+
+      let type;
+
+      let description;
+
+      let clubs;
+
+      if (
+
+        answers.level === "beginner"
+
+      ) {
+
+        type =
+
+          "やさしさ重視タイプ";
+
+        description =
+
+          "ミスへの強さと球の上がりやすさを優先したクラブ構成がおすすめです。";
+
+        clubs = [
+
+          {
+
+            category:
+
+              "DRIVER",
+
+            name:
+
+              answers.driverMiss === "slice"
+
+                ? "PING G440 SFT"
+
+                : "PING G440 K",
+
+            reason:
+
+              answers.driverMiss === "slice"
+
+                ? "右へのミスが多い人は、つかまりを意識したドロー設計モデルを比較する価値があります。"
+
+                : "打点がばらついた時でも、できるだけ方向性を安定させやすいモデルが候補です。"
+
+          },
+
+          {
+
+            category:
+
+              "FAIRWAY WOOD",
+
+            name:
+
+              "Callaway QUANTUM MAX 5W",
+
+            reason:
+
+              "初心者は3Wより5Wの方が球を上げやすく、芝からのショットでも扱いやすい傾向があります。"
+
+          },
+
+          {
+
+            category:
+
+              "UTILITY",
+
+            name:
+
+              "PING G440 HYBRID",
+
+            reason:
+
+              "ロングアイアンの代わりとして、高さと安定性を出しやすいユーティリティが候補です。"
+
+          },
+
+          {
+
+            category:
+
+              "IRON",
+
+            name:
+
+              "PING G440",
+
+            reason:
+
+              "大きめのヘッドと寛容性を重視し、打点が多少ずれても距離を確保しやすい設計が向いています。"
+
+          },
+
+          {
+
+            category:
+
+              "WEDGE",
+
+            name:
+
+              "やさしさ重視のハイバウンス系",
+
+            reason:
+
+              "ダフリへの許容性を持たせやすいソール形状から試すのがおすすめです。"
+
+          },
+
+          {
+
+            category:
+
+              "PUTTER",
+
+            name:
+
+              "Odyssey Square 2 Square",
+
+            reason:
+
+              "フェース向きを安定させたい人は、ゼロトルク系パターも比較候補になります。"
+
+          }
+
+        ];
+
+      }
+
+      else if (
+
+        answers.level ===
+
+        "intermediate"
+
+      ) {
+
+        type =
+
+          "バランス重視タイプ";
+
+        description =
+
+          "寛容性を残しながら、飛距離・方向性・操作性をバランス良く高める構成がおすすめです。";
+
+        clubs = [
+
+          {
+
+            category:
+
+              "DRIVER",
+
+            name:
+
+              "PING G440 MAX / TaylorMade Qi4D",
+
+            reason:
+
+              "ミスへの強さを残しつつ、飛距離性能と弾道調整の両方を比較しやすいモデルです。"
+
+          },
+
+          {
+
+            category:
+
+              "FAIRWAY WOOD",
+
+            name:
+
+              "PING G440 MAX / TaylorMade Qi4D",
+
+            reason:
+
+              "ティーショットでも芝からでも使いやすいバランス型を基準に比較します。"
+
+          },
+
+          {
+
+            category:
+
+              "UTILITY",
+
+            name:
+
+              "PING G440 / TaylorMade Qi4D",
+
+            reason:
+
+              "寛容性重視か、アイアンに近い操作感を求めるかで選び分けできます。"
+
+          },
+
+          {
+
+            category:
+
+              "IRON",
+
+            name:
+
+              "TaylorMade P790 / Titleist T250",
+
+            reason:
+
+              "見た目のシャープさを保ちながら、飛距離と寛容性も確保したい人に向きます。"
+
+          },
+
+          {
+
+            category:
+
+              "WEDGE",
+
+            name:
+
+              "Titleist Vokey SM11",
+
+            reason:
+
+              "ロフトだけでなくバウンスやソール形状まで、自分の入射角に合わせて選びやすいモデルです。"
+
+          },
+
+          {
+
+            category:
+
+              "PUTTER",
+
+            name:
+
+              "Odyssey S2S / Scotty Cameron Phantom",
+
+            reason:
+
+              "方向安定性を重視するならゼロトルク系、打感と安定感ならマレット系を比較します。"
+
+          }
+
+        ];
+
+      }
+
+      else {
+
+        type =
+
+          "操作性重視タイプ";
+
+        description =
+
+          "弾道・スピン量・距離・打点の再現性を細かく調整できるクラブ構成がおすすめです。";
+
+        clubs = [
+
+          {
+
+            category:
+
+              "DRIVER",
+
+            name:
+
+              "PING G440 LST / TaylorMade Qi4D LS",
+
+            reason:
+
+              "スピン量を抑えながら、強い弾道と細かな弾道調整を求める人に向きます。"
+
+          },
+
+          {
+
+            category:
+
+              "FAIRWAY WOOD",
+
+            name:
+
+              "PING G440 LST / TaylorMade Qi4D",
+
+            reason:
+
+              "ティーショットとフェアウェイ双方で、弾道コントロールを重視できます。"
+
+          },
+
+          {
+
+            category:
+
+              "UTILITY",
+
+            name:
+
+              "TaylorMade Qi4D / PING G440",
+
+            reason:
+
+              "操作性を優先するか、寛容性を残すかで選び分けできます。"
+
+          },
+
+          {
+
+            category:
+
+              "IRON",
+
+            name:
+
+              "PING i240 / Players Iron",
+
+            reason:
+
+              "距離の打ち分けや弾道コントロールを重視するプレーヤー向けです。"
+
+          },
+
+          {
+
+            category:
+
+              "WEDGE",
+
+            name:
+
+              "Titleist Vokey SM11",
+
+            reason:
+
+              "ロフト・バウンス・グラインドまで細かくフィッティングすることで性能を活かしやすくなります。"
+
+          },
+
+          {
+
+            category:
+
+              "PUTTER",
+
+            name:
+
+              "Odyssey S2S / Phantom / Studio Style",
+
+            reason:
+
+              "ストローク特性に合わせてゼロトルク・マレット・ブレードを比較します。"
+
+          }
+
+        ];
+
+      }
+
+      return {
+
+        type,
+
+        description,
+
+        clubs
+
+      };
+
+    }
+
+    function restart() {
+
+      location.reload();
+
+    }
+
+  </script>
+
+</body>
+
+</html>
