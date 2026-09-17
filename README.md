@@ -1,0 +1,1 @@
+# golfguts-clubranking
